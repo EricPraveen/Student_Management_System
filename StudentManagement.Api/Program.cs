@@ -21,23 +21,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/db-test", async (ApplicationDbContext db) =>
-{
-    try
-    {
-        bool connected = await db.Database.CanConnectAsync();
-
-        return connected
-            ? Results.Ok("Supabase database connected successfully!")
-            : Results.Problem("Database connection failed.");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex);
-        return Results.Problem("Database connection failed. Check terminal logs.");
-    }
-});
-
-app.MapControllers();
 
 app.Run(); 

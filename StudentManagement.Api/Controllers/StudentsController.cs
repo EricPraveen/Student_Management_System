@@ -71,33 +71,54 @@ public class StudentsController : ControllerBase
         );
     }
 
-    //PUT Method 
+    // PUT: api/students/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStudent(
         string id,
         UpdateStudentDto dto)
     {
-    var student = await _context.Students.FindAsync(id);
+        var student = await _context.Students.FindAsync(id);
 
-    if (student == null)
-    {
-        return NotFound();
+        if (student == null)
+        {
+            return NotFound();
+        }
+
+        student.FirstName = dto.FirstName;
+        student.LastName = dto.LastName;
+        student.Email = dto.Email;
+        student.Phone = dto.Phone;
+        student.DateOfBirth = dto.DateOfBirth;
+        student.Gender = dto.Gender;
+        student.Address = dto.Address;
+
+        student.UpdatedAt = DateTimeOffset.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(student);
     }
 
-    student.FirstName = dto.FirstName;
-    student.LastName = dto.LastName;
-    student.Email = dto.Email;
-    student.Phone = dto.Phone;
-    student.DateOfBirth = dto.DateOfBirth;
-    student.Gender = dto.Gender;
-    student.Address = dto.Address;
 
-    student.UpdatedAt = DateTime.UtcNow;
+    //Delete Method
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteStudent(string id)
+    {
+        var student = await _context.Students.FindAsync(id);
 
-    await _context.SaveChangesAsync();
+        if (student == null)
+        {
+            return NotFound();
+        }
 
-    return Ok(student);
+        _context.Students.Remove(student);
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
 }
 
 
-}
+
