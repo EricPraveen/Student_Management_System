@@ -31,6 +31,6 @@ public class UpdateStudentDto
     [ValidGender]
     public string? Gender { get; set; }
 
-    [StringLength(250, MinimumLength = 5, ErrorMessage = "Address must be between 5 and 250 characters.")]
+    [ValidAddress]
     public string? Address { get; set; }
 }
