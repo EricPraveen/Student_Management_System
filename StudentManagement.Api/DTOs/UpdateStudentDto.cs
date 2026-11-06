@@ -6,28 +6,31 @@ namespace StudentManagement.Api.DTOs;
 public class UpdateStudentDto
 {
     [Required(ErrorMessage = "First name is required.")]
-    [StringLength(100, MinimumLength = 2, ErrorMessage = "First name must be between 2 and 100 characters.")]
+    [StringLength(50, MinimumLength = 2, ErrorMessage = "First name must be between 2 and 50 characters.")]
     public string FirstName { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Last name is required.")]
-    [StringLength(100, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 100 characters.")]
+    [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 50 characters.")]
     public string LastName { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Email is required.")]
-    [EmailAddress(ErrorMessage = "Invalid email address format.")]
-    [StringLength(255, ErrorMessage = "Email cannot exceed 255 characters.")]
+    [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
+    [StringLength(254, MinimumLength = 5, ErrorMessage = "Email must be between 5 and 254 characters.")]
     public string Email { get; set; } = string.Empty;
 
-    [RegularExpression(@"^\+?[0-9]{10,15}$", ErrorMessage = "Phone number must be between 10 and 15 digits (e.g., 0771234567 or +94771234567).")]
+    [StringLength(13, ErrorMessage = "Phone number cannot exceed 13 characters.")]
+    [RegularExpression(
+        @"^(?:\+94|0)?7[0-9]{8}$",
+        ErrorMessage = "Please enter a valid Sri Lankan mobile number."
+    )]
     public string? Phone { get; set; }
 
     [ValidDateOfBirth]
     public DateOnly? DateOfBirth { get; set; }
 
     [ValidGender]
-    [StringLength(20, ErrorMessage = "Gender cannot exceed 20 characters.")]
     public string? Gender { get; set; }
 
-    [StringLength(500, MinimumLength = 3, ErrorMessage = "Address must be between 3 and 500 characters.")]
+    [StringLength(250, MinimumLength = 5, ErrorMessage = "Address must be between 5 and 250 characters.")]
     public string? Address { get; set; }
 }
