@@ -199,4 +199,174 @@ public class StudentDtoValidationTests
 
         Assert.Contains(errors, e => e.ErrorMessage == expectedErrorMessage);
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("123 Main Street, Colombo")]
+    [InlineData("Jaffna, Sri Lanka")]
+    [InlineData("No. 25, Temple Road")]
+    public void CreateStudentDto_WithValidAddress_PassesValidation(string? validAddress)
+    {
+        var dto = new CreateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = validAddress
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Empty(errors);
+    }
+
+    [Fact]
+    public void CreateStudentDto_WithMaxLengthAddress_PassesValidation()
+    {
+        var dto = new CreateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = new string('A', 250)
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Empty(errors);
+    }
+
+    [Theory]
+    [InlineData(" ")]
+    [InlineData("   ")]
+    [InlineData("\t")]
+    [InlineData("     ")]
+    public void CreateStudentDto_WithWhitespaceOnlyAddress_FailsValidation(string whitespaceAddress)
+    {
+        var dto = new CreateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = whitespaceAddress
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == "Address cannot contain only whitespace.");
+    }
+
+    [Theory]
+    [InlineData("A")]
+    [InlineData("ABC")]
+    [InlineData("1234")]
+    [InlineData("  AB  ")]
+    public void CreateStudentDto_WithTooShortAddress_FailsValidation(string shortAddress)
+    {
+        var dto = new CreateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = shortAddress
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == "Address must be between 5 and 250 characters.");
+    }
+
+    [Fact]
+    public void CreateStudentDto_WithTooLongAddress_FailsValidation()
+    {
+        var dto = new CreateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = new string('A', 251)
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == "Address must be between 5 and 250 characters.");
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("123 Main Street, Colombo")]
+    [InlineData("Jaffna, Sri Lanka")]
+    [InlineData("No. 25, Temple Road")]
+    public void UpdateStudentDto_WithValidAddress_PassesValidation(string? validAddress)
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = validAddress
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Empty(errors);
+    }
+
+    [Theory]
+    [InlineData(" ")]
+    [InlineData("   ")]
+    [InlineData("\t")]
+    [InlineData("     ")]
+    public void UpdateStudentDto_WithWhitespaceOnlyAddress_FailsValidation(string whitespaceAddress)
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = whitespaceAddress
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == "Address cannot contain only whitespace.");
+    }
+
+    [Theory]
+    [InlineData("A")]
+    [InlineData("ABC")]
+    [InlineData("1234")]
+    [InlineData("  AB  ")]
+    public void UpdateStudentDto_WithTooShortAddress_FailsValidation(string shortAddress)
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = shortAddress
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == "Address must be between 5 and 250 characters.");
+    }
+
+    [Fact]
+    public void UpdateStudentDto_WithTooLongAddress_FailsValidation()
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = new string('A', 251)
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == "Address must be between 5 and 250 characters.");
+    }
 }
