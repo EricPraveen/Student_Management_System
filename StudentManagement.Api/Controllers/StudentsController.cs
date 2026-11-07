@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentManagement.Api.Data;
@@ -31,12 +30,31 @@ public class StudentsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Student>> GetStudent(string id)
     {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            return BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                Title = "Invalid student ID.",
+                Detail = "Student ID cannot be empty or whitespace.",
+                Instance = HttpContext.Request.Path
+            });
+        }
+
         var student = await _context.Students
             .FirstOrDefaultAsync(s => s.Id == id);
 
         if (student == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+                Title = "Student not found.",
+                Detail = $"Student with ID '{id}' was not found.",
+                Instance = HttpContext.Request.Path
+            });
         }
 
         return Ok(student);
@@ -47,6 +65,21 @@ public class StudentsController : ControllerBase
     public async Task<ActionResult<Student>> CreateStudent(
         CreateStudentDto studentDto)
     {
+        var emailExists = await _context.Students
+            .AnyAsync(s => s.Email == studentDto.Email);
+
+        if (emailExists)
+        {
+            return Conflict(new ProblemDetails
+            {
+                Status = StatusCodes.Status409Conflict,
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.10",
+                Title = "Email already registered.",
+                Detail = $"A student with email '{studentDto.Email}' already exists.",
+                Instance = HttpContext.Request.Path
+            });
+        }
+
         var student = new Student
         {
             FirstName = studentDto.FirstName,
@@ -77,11 +110,45 @@ public class StudentsController : ControllerBase
         string id,
         UpdateStudentDto dto)
     {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            return BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                Title = "Invalid student ID.",
+                Detail = "Student ID cannot be empty or whitespace.",
+                Instance = HttpContext.Request.Path
+            });
+        }
+
         var student = await _context.Students.FindAsync(id);
 
         if (student == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+                Title = "Student not found.",
+                Detail = $"Student with ID '{id}' was not found.",
+                Instance = HttpContext.Request.Path
+            });
+        }
+
+        var emailConflict = await _context.Students
+            .AnyAsync(s => s.Email == dto.Email && s.Id != id);
+
+        if (emailConflict)
+        {
+            return Conflict(new ProblemDetails
+            {
+                Status = StatusCodes.Status409Conflict,
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.10",
+                Title = "Email already in use.",
+                Detail = $"The email '{dto.Email}' is already in use by another student.",
+                Instance = HttpContext.Request.Path
+            });
         }
 
         student.FirstName = dto.FirstName;
@@ -91,24 +158,59 @@ public class StudentsController : ControllerBase
         student.DateOfBirth = dto.DateOfBirth;
         student.Gender = dto.Gender;
         student.Address = dto.Address;
-
         student.UpdatedAt = DateTimeOffset.UtcNow;
 
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _context.Students.AnyAsync(s => s.Id == id))
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Status = StatusCodes.Status404NotFound,
+                    Type = "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+                    Title = "Student not found.",
+                    Detail = $"Student with ID '{id}' was not found.",
+                    Instance = HttpContext.Request.Path
+                });
+            }
+            throw;
+        }
 
         return Ok(student);
     }
 
-
-    //Delete Method
+    // DELETE: api/students/{id}
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStudent(string id)
     {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            return BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                Title = "Invalid student ID.",
+                Detail = "Student ID cannot be empty or whitespace.",
+                Instance = HttpContext.Request.Path
+            });
+        }
+
         var student = await _context.Students.FindAsync(id);
 
         if (student == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+                Title = "Student not found.",
+                Detail = $"Student with ID '{id}' was not found.",
+                Instance = HttpContext.Request.Path
+            });
         }
 
         _context.Students.Remove(student);
@@ -117,8 +219,4 @@ public class StudentsController : ControllerBase
 
         return NoContent();
     }
-
 }
-
-
-
