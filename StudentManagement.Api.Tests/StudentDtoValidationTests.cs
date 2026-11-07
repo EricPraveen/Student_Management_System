@@ -201,6 +201,132 @@ public class StudentDtoValidationTests
     }
 
     [Theory]
+    [InlineData("studentgmail.com")]
+    [InlineData("student@")]
+    [InlineData("@gmail.com")]
+    [InlineData("student@@gmail.com")]
+    public void UpdateStudentDto_WithInvalidEmail_FailsValidation(string invalidEmail)
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = invalidEmail
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == "Please enter a valid email address.");
+    }
+
+    [Theory]
+    [InlineData("0771234567")]
+    [InlineData("+94771234567")]
+    [InlineData("771234567")]
+    public void UpdateStudentDto_WithValidSriLankanPhone_PassesValidation(string validPhone)
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Phone = validPhone
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Empty(errors);
+    }
+
+    [Theory]
+    [InlineData("07712345")]
+    [InlineData("077123456789")]
+    [InlineData("abcdefghij")]
+    [InlineData("0111234567")]
+    public void UpdateStudentDto_WithInvalidPhone_FailsValidation(string invalidPhone)
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Phone = invalidPhone
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == "Please enter a valid Sri Lankan mobile number.");
+    }
+
+    [Theory]
+    [InlineData("A", "ValidLast", "First name must be between 2 and 50 characters.")]
+    [InlineData("ValidFirst", "B", "Last name must be between 2 and 50 characters.")]
+    public void UpdateStudentDto_WithOutOfRangeNames_FailsValidation(
+        string firstName, string lastName, string expectedErrorMessage)
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            Email = "eric@example.com"
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == expectedErrorMessage);
+    }
+
+    [Fact]
+    public void UpdateStudentDto_WithFutureDateOfBirth_FailsValidation()
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            DateOfBirth = DateOnly.FromDateTime(DateTime.Today.AddDays(1))
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage == "Date of birth cannot be in the future.");
+    }
+
+    [Theory]
+    [InlineData("Unknown")]
+    [InlineData("Alien")]
+    public void UpdateStudentDto_WithInvalidGender_FailsValidation(string invalidGender)
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Gender = invalidGender
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Contains(errors, e => e.ErrorMessage != null && e.ErrorMessage.Contains("Gender must be one of the following: Male, Female, Other."));
+    }
+
+    [Fact]
+    public void UpdateStudentDto_WithMaxLengthAddress_PassesValidation()
+    {
+        var dto = new UpdateStudentDto
+        {
+            FirstName = "Eric",
+            LastName = "Praveen",
+            Email = "eric@example.com",
+            Address = new string('A', 250)
+        };
+
+        var errors = ValidateModel(dto);
+
+        Assert.Empty(errors);
+    }
+
+    [Theory]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("123 Main Street, Colombo")]
