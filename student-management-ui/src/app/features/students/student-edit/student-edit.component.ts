@@ -16,27 +16,27 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
       <!-- Breadcrumb & Header -->
       <div class="flex items-center justify-between">
         <div>
-          <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1">
+          <div class="flex items-center gap-2 text-sm font-semibold text-slate-500 mb-1">
             <a routerLink="/students" class="hover:text-indigo-600 transition-colors">Students</a>
             <span>/</span>
-            <span class="text-slate-700">Edit Profile</span>
+            <span class="text-slate-800 font-bold">Edit Profile</span>
           </div>
-          <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
-            Edit Student
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+            Edit Student Details
             @if (student(); as s) {
-              <span class="text-xs px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono font-medium border border-slate-200">
+              <span class="text-xs sm:text-sm px-3 py-1 rounded-xl bg-indigo-100 text-indigo-700 font-mono font-bold border border-indigo-200">
                 {{ s.id }}
               </span>
             }
           </h1>
-          <p class="text-xs text-slate-500 mt-1">
-            Update student credentials, contact info, and registration details.
+          <p class="text-sm sm:text-base text-slate-600 mt-1 font-medium">
+            Update this student's name, phone, address, or contact details.
           </p>
         </div>
 
         <a
           [routerLink]="student() ? ['/students', student()!.id] : ['/students']"
-          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border border-slate-200 bg-white text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs"
         >
           &larr; Cancel & Back
         </a>
@@ -44,39 +44,39 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
 
       <!-- Loading State -->
       @if (isLoading()) {
-        <div class="rounded-2xl bg-white border border-slate-200/80 p-12 text-center shadow-xs">
+        <div class="rounded-3xl bg-white border border-slate-200 p-16 text-center shadow-sm">
           <div class="flex flex-col items-center gap-3">
-            <svg class="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
+            <svg class="animate-spin h-10 w-10 text-indigo-600" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <p class="text-xs font-semibold text-slate-500">Fetching student details from database...</p>
+            <p class="text-sm font-bold text-slate-600">Loading student details...</p>
           </div>
         </div>
       }
 
       <!-- Load Error State -->
       @if (loadError()) {
-        <div class="rounded-2xl bg-rose-50 border border-rose-200 p-6 flex items-start gap-4 shadow-xs">
-          <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <div class="rounded-3xl bg-rose-50 border border-rose-200 p-6 flex items-start gap-4 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
           </div>
           <div class="flex-1">
-            <h3 class="text-sm font-bold text-rose-900">Student Not Found or Load Failed</h3>
-            <p class="text-xs text-rose-700 mt-1">{{ loadError() }}</p>
+            <h3 class="text-base font-bold text-rose-900">Student Not Found or Load Failed</h3>
+            <p class="text-sm text-rose-700 mt-1 font-medium">{{ loadError() }}</p>
             <div class="mt-4 flex gap-3">
               <button
                 type="button"
                 (click)="loadStudent()"
-                class="px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700 transition-colors"
+                class="px-4 py-2 rounded-xl bg-rose-600 text-white text-sm font-bold hover:bg-rose-700 transition-colors cursor-pointer"
               >
                 Try Again
               </button>
               <a
                 routerLink="/students"
-                class="px-4 py-2 rounded-xl border border-rose-200 bg-white text-rose-700 text-xs font-semibold hover:bg-rose-50 transition-colors"
+                class="px-4 py-2 rounded-xl border border-rose-200 bg-white text-rose-700 text-sm font-bold hover:bg-rose-50 transition-colors"
               >
                 Return to Directory
               </a>
@@ -89,38 +89,38 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
       @if (!isLoading() && !loadError()) {
         <!-- Submit Error Banner -->
         @if (generalError()) {
-          <div class="rounded-2xl bg-rose-50 border border-rose-200 p-4 flex items-start gap-3">
-            <svg class="w-5 h-5 text-rose-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <div class="rounded-3xl bg-rose-50 border border-rose-200 p-5 flex items-start gap-4">
+            <svg class="w-6 h-6 text-rose-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
             <div class="flex-1">
-              <h4 class="text-xs font-bold text-rose-900 uppercase tracking-wide">Update Error</h4>
-              <p class="text-xs text-rose-700 mt-0.5">{{ generalError() }}</p>
+              <h4 class="text-sm font-bold text-rose-900 uppercase tracking-wide">Please check your input</h4>
+              <p class="text-sm text-rose-700 mt-1 font-medium">{{ generalError() }}</p>
             </div>
           </div>
         }
 
-        <div class="rounded-2xl bg-white border border-slate-200/80 shadow-xs p-6 sm:p-8">
+        <div class="rounded-3xl bg-white border border-slate-200 shadow-sm p-6 sm:p-8">
           <form [formGroup]="studentForm" (ngSubmit)="onSubmit()" class="space-y-6">
             <!-- Name Section (2 Columns) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <!-- First Name -->
               <div>
-                <label for="firstName" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label for="firstName" class="block text-sm sm:text-base font-bold text-slate-800 mb-2">
                   First Name <span class="text-rose-500">*</span>
                 </label>
                 <input
                   id="firstName"
                   type="text"
                   formControlName="firstName"
-                  class="w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-800 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/50"
+                  class="w-full px-4 py-3 rounded-2xl border text-base text-slate-900 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/70"
                   [ngClass]="{
                     'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500': isFieldInvalid('firstName'),
                     'border-slate-200 focus:ring-indigo-500/20 focus:border-indigo-500': !isFieldInvalid('firstName')
                   }"
                 />
                 @if (isFieldInvalid('firstName')) {
-                  <div class="mt-1 text-xs text-rose-600 space-y-0.5">
+                  <div class="mt-1.5 text-sm font-semibold text-rose-600 space-y-0.5">
                     @if (studentForm.get('firstName')?.errors?.['required']) {
                       <p>First name is required.</p>
                     }
@@ -139,21 +139,21 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
 
               <!-- Last Name -->
               <div>
-                <label for="lastName" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label for="lastName" class="block text-sm sm:text-base font-bold text-slate-800 mb-2">
                   Last Name <span class="text-rose-500">*</span>
                 </label>
                 <input
                   id="lastName"
                   type="text"
                   formControlName="lastName"
-                  class="w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-800 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/50"
+                  class="w-full px-4 py-3 rounded-2xl border text-base text-slate-900 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/70"
                   [ngClass]="{
                     'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500': isFieldInvalid('lastName'),
                     'border-slate-200 focus:ring-indigo-500/20 focus:border-indigo-500': !isFieldInvalid('lastName')
                   }"
                 />
                 @if (isFieldInvalid('lastName')) {
-                  <div class="mt-1 text-xs text-rose-600 space-y-0.5">
+                  <div class="mt-1.5 text-sm font-semibold text-rose-600 space-y-0.5">
                     @if (studentForm.get('lastName')?.errors?.['required']) {
                       <p>Last name is required.</p>
                     }
@@ -172,24 +172,24 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
             </div>
 
             <!-- Email & Phone (2 Columns) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <!-- Email -->
               <div>
-                <label for="email" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label for="email" class="block text-sm sm:text-base font-bold text-slate-800 mb-2">
                   Email Address <span class="text-rose-500">*</span>
                 </label>
                 <input
                   id="email"
                   type="email"
                   formControlName="email"
-                  class="w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-800 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/50"
+                  class="w-full px-4 py-3 rounded-2xl border text-base text-slate-900 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/70"
                   [ngClass]="{
                     'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500': isFieldInvalid('email'),
                     'border-slate-200 focus:ring-indigo-500/20 focus:border-indigo-500': !isFieldInvalid('email')
                   }"
                 />
                 @if (isFieldInvalid('email')) {
-                  <div class="mt-1 text-xs text-rose-600 space-y-0.5">
+                  <div class="mt-1.5 text-sm font-semibold text-rose-600 space-y-0.5">
                     @if (studentForm.get('email')?.errors?.['required']) {
                       <p>Email is required.</p>
                     }
@@ -211,22 +211,22 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
 
               <!-- Phone -->
               <div>
-                <label for="phone" class="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Phone Number <span class="text-xs text-slate-400 font-normal">(Optional)</span>
+                <label for="phone" class="block text-sm sm:text-base font-bold text-slate-800 mb-2">
+                  Phone Number <span class="text-xs text-slate-500 font-medium">(Optional)</span>
                 </label>
                 <input
                   id="phone"
                   type="tel"
                   formControlName="phone"
                   placeholder="e.g. 0771234567 or +94771234567"
-                  class="w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-800 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/50"
+                  class="w-full px-4 py-3 rounded-2xl border text-base text-slate-900 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/70"
                   [ngClass]="{
                     'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500': isFieldInvalid('phone'),
                     'border-slate-200 focus:ring-indigo-500/20 focus:border-indigo-500': !isFieldInvalid('phone')
                   }"
                 />
                 @if (isFieldInvalid('phone')) {
-                  <div class="mt-1 text-xs text-rose-600 space-y-0.5">
+                  <div class="mt-1.5 text-sm font-semibold text-rose-600 space-y-0.5">
                     @if (studentForm.get('phone')?.errors?.['pattern']) {
                       <p>Please enter a valid Sri Lankan mobile number (e.g. 0771234567 or +94771234567).</p>
                     }
@@ -242,25 +242,25 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
             </div>
 
             <!-- Date of Birth & Gender (2 Columns) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <!-- Date of Birth -->
               <div>
-                <label for="dateOfBirth" class="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Date of Birth <span class="text-xs text-slate-400 font-normal">(Optional)</span>
+                <label for="dateOfBirth" class="block text-sm sm:text-base font-bold text-slate-800 mb-2">
+                  Date of Birth <span class="text-xs text-slate-500 font-medium">(Optional)</span>
                 </label>
                 <input
                   id="dateOfBirth"
                   type="date"
                   formControlName="dateOfBirth"
                   [max]="todayString"
-                  class="w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-800 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/50"
+                  class="w-full px-4 py-3 rounded-2xl border text-base text-slate-900 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/70"
                   [ngClass]="{
                     'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500': isFieldInvalid('dateOfBirth'),
                     'border-slate-200 focus:ring-indigo-500/20 focus:border-indigo-500': !isFieldInvalid('dateOfBirth')
                   }"
                 />
                 @if (isFieldInvalid('dateOfBirth')) {
-                  <div class="mt-1 text-xs text-rose-600 space-y-0.5">
+                  <div class="mt-1.5 text-sm font-semibold text-rose-600 space-y-0.5">
                     @if (studentForm.get('dateOfBirth')?.errors?.['futureDate']) {
                       <p>Date of birth cannot be in the future.</p>
                     }
@@ -276,13 +276,13 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
 
               <!-- Gender -->
               <div>
-                <label for="gender" class="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Gender <span class="text-xs text-slate-400 font-normal">(Optional)</span>
+                <label for="gender" class="block text-sm sm:text-base font-bold text-slate-800 mb-2">
+                  Gender <span class="text-xs text-slate-500 font-medium">(Optional)</span>
                 </label>
                 <select
                   id="gender"
                   formControlName="gender"
-                  class="w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-800 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/50"
+                  class="w-full px-4 py-3 rounded-2xl border text-base text-slate-900 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/70 cursor-pointer"
                   [ngClass]="{
                     'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500': isFieldInvalid('gender'),
                     'border-slate-200 focus:ring-indigo-500/20 focus:border-indigo-500': !isFieldInvalid('gender')
@@ -294,7 +294,7 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
                   <option value="Other">Other</option>
                 </select>
                 @if (isFieldInvalid('gender') && serverErrors()['gender']) {
-                  <div class="mt-1 text-xs text-rose-600">
+                  <div class="mt-1.5 text-sm font-semibold text-rose-600">
                     <p>{{ serverErrors()['gender'][0] }}</p>
                   </div>
                 }
@@ -303,21 +303,21 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
 
             <!-- Address (Full Width) -->
             <div>
-              <label for="address" class="block text-xs font-semibold text-slate-700 mb-1.5">
-                Address <span class="text-xs text-slate-400 font-normal">(Optional, 5–250 chars)</span>
+              <label for="address" class="block text-sm sm:text-base font-bold text-slate-800 mb-2">
+                Home Address <span class="text-xs text-slate-500 font-medium">(Optional, 5–250 characters)</span>
               </label>
               <textarea
                 id="address"
                 rows="3"
                 formControlName="address"
-                class="w-full px-3.5 py-2.5 rounded-xl border text-sm text-slate-800 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/50 resize-y"
+                class="w-full px-4 py-3 rounded-2xl border text-base text-slate-900 focus:outline-hidden focus:ring-2 transition-all bg-slate-50/70 resize-y"
                 [ngClass]="{
                   'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500': isFieldInvalid('address'),
                   'border-slate-200 focus:ring-indigo-500/20 focus:border-indigo-500': !isFieldInvalid('address')
                 }"
               ></textarea>
               @if (isFieldInvalid('address')) {
-                <div class="mt-1 text-xs text-rose-600 space-y-0.5">
+                <div class="mt-1.5 text-sm font-semibold text-rose-600 space-y-0.5">
                   @if (studentForm.get('address')?.errors?.['whitespaceOnly']) {
                     <p>Address cannot contain only whitespace.</p>
                   }
@@ -332,17 +332,17 @@ import { SRI_LANKAN_PHONE_REGEX, addressValidator, dateOfBirthValidator } from '
             </div>
 
             <!-- Action Buttons -->
-            <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+            <div class="pt-5 border-t border-slate-200 flex items-center justify-end gap-3.5">
               <a
                 [routerLink]="['/students', studentId]"
-                class="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                class="px-5 py-3 rounded-2xl border border-slate-200 text-sm sm:text-base font-bold text-slate-700 hover:bg-slate-100 transition-colors"
               >
                 Cancel
               </a>
               <button
                 type="submit"
                 [disabled]="isSubmitting()"
-                class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm sm:text-base font-bold shadow-md shadow-indigo-600/25 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
               >
                 @if (isSubmitting()) {
                   <svg class="animate-spin -ml-1 mr-1 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">

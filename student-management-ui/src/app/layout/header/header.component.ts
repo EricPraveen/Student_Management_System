@@ -8,55 +8,55 @@ import { filter } from 'rxjs';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <header class="h-18 bg-white border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-2xs backdrop-blur-xs bg-white/95">
+    <header class="h-20 bg-white border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs backdrop-blur-md bg-white/95">
       <!-- Left side: Hamburger & Title / Breadcrumbs -->
-      <div class="flex items-center gap-3 sm:gap-4">
+      <div class="flex items-center gap-3.5 sm:gap-5">
         <!-- Mobile hamburger toggle -->
         <button
           type="button"
           (click)="toggleSidebar.emit()"
-          class="p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl lg:hidden focus:outline-hidden"
+          class="p-2.5 -ml-1 text-slate-700 hover:text-slate-950 hover:bg-slate-100 rounded-2xl lg:hidden focus:outline-hidden cursor-pointer"
           aria-label="Toggle Navigation"
         >
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
         </button>
 
         <!-- Page Header Info -->
         <div>
-          <nav aria-label="Breadcrumb" class="hidden sm:flex items-center gap-1.5 text-xs text-slate-600 font-medium mb-0.5">
-            <a routerLink="/dashboard" class="hover:text-indigo-600 transition-colors">Portal</a>
+          <nav aria-label="Breadcrumb" class="hidden sm:flex items-center gap-2 text-sm text-slate-500 font-semibold mb-1">
+            <a routerLink="/dashboard" class="hover:text-indigo-600 transition-colors">School Hub</a>
             <span class="text-slate-300">/</span>
-            <span class="text-slate-700 capitalize">{{ currentSection }}</span>
+            <span class="text-slate-800 capitalize font-bold">{{ currentSection }}</span>
           </nav>
-          <h2 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">
             {{ pageTitle }}
           </h2>
         </div>
       </div>
 
       <!-- Right side: Quick Action & User Profile -->
-      <div class="flex items-center gap-3 sm:gap-4">
+      <div class="flex items-center gap-4 sm:gap-5">
         <!-- Add Student quick button -->
         <a
           routerLink="/students/create"
-          class="hidden md:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100/80 text-indigo-700 text-xs font-semibold transition-all border border-indigo-200/60"
+          class="hidden md:inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
         >
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-          <span>New Student</span>
+          <span>Add Student</span>
         </a>
 
         <!-- User Profile Placeholder -->
-        <div class="flex items-center gap-3 pl-2 sm:pl-3 sm:border-l border-slate-200">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center text-white text-xs font-bold shadow-xs">
+        <div class="flex items-center gap-3 pl-2 sm:pl-4 sm:border-l border-slate-200">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-700 to-indigo-500 flex items-center justify-center text-white text-sm font-extrabold shadow-sm ring-2 ring-indigo-100">
             EP
           </div>
           <div class="hidden sm:block text-left">
-            <p class="text-xs font-bold text-slate-800 leading-tight">Eric Praveen</p>
-            <p class="text-[11px] font-medium text-slate-600 leading-tight">Administrator</p>
+            <p class="text-sm font-extrabold text-slate-900 leading-tight">Eric Praveen</p>
+            <p class="text-xs font-semibold text-indigo-600 leading-tight mt-0.5">Administrator</p>
           </div>
         </div>
       </div>
