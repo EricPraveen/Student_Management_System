@@ -117,7 +117,7 @@ export class StudentService {
       }
 
       if (error.status === 0) {
-        return 'Cannot connect to backend server. Please verify the API is running at ' + environment.apiUrl;
+        return 'Cannot connect to backend server. Please verify the ASP.NET Core API is running on http://localhost:5261.';
       }
       if (error.status === 404) {
         return 'The requested student record could not be found.';
