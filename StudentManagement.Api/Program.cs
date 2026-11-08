@@ -5,6 +5,17 @@ using StudentManagement.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Register CORS for Angular frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 // Register controllers with automatic model validation error response (400 Bad Request)
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -43,6 +54,8 @@ var app = builder.Build();
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAngularDev");
 
 app.UseAuthorization();
 
